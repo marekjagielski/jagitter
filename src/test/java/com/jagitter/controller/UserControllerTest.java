@@ -1,7 +1,6 @@
 package com.jagitter.controller;
 
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -27,7 +26,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.jagitter.Application;
 import com.jagitter.data.User;
-import com.jagitter.repository.UserRepository;
+import com.jagitter.service.UserService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
@@ -38,7 +37,7 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    UserRepository userRepository;
+    UserService userService;
 
     @InjectMocks
     private UserController controller;
@@ -53,8 +52,8 @@ public class UserControllerTest {
     @DisplayName("Create a new user")
     public void testCreateUser1() throws Exception {
         String userId = UUID.randomUUID().toString();
-        when(userRepository.findOne(userId)).thenReturn(null);
-        when(userRepository.save(any(User.class))).thenReturn(new User(userId));
+        when(userService.userExists(userId)).thenReturn(false);
+        when(userService.createUser(userId)).thenReturn(new User(userId));
         mockMvc.perform(put("/users/" + userId))
                 .andExpect(status().isCreated());
     }
@@ -63,7 +62,7 @@ public class UserControllerTest {
     @DisplayName("Try to create user for existing user id")
     public void testCreateUser2() throws Exception {
         String userId = UUID.randomUUID().toString();
-        when(userRepository.findOne(userId)).thenReturn(new User(userId));
+        when(userService.userExists(userId)).thenReturn(true);
         mockMvc.perform(put("/users/" + userId))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
@@ -82,7 +81,7 @@ public class UserControllerTest {
     @Test
     @DisplayName("List is empty")
     public void listUsers1() throws Exception {
-        when(userRepository.findAll()).thenReturn(new ArrayList<>());
+        when(userService.listAllUsers()).thenReturn(new ArrayList<>());
         mockMvc.perform(get("/users"))
                 .andExpect(status().isNoContent());
     }
