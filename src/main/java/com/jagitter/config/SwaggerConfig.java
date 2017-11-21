@@ -27,7 +27,7 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Jaggiter")
+                .title("Jagitter")
                 .description("This is an example of microblog service REST api.")
                 .version("1.0")
                 .build();
