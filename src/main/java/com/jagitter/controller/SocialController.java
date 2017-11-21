@@ -36,8 +36,8 @@ public class SocialController {
             value = "/{user-id-1}/follows/{user-id-2}",
             method = RequestMethod.PUT)
     @ApiOperation(
-            value = "Post a new message to user's wall",
-            notes = "Post a new message to user's wall")
+            value = "User 1 follows User 2",
+            notes = "User 1 follows User 2")
     @ResponseStatus(code=HttpStatus.CREATED)
     public void follows(
             @PathVariable("user-id-1") String followingUserId,
@@ -62,8 +62,8 @@ public class SocialController {
             value = "/{user-id}/follows",
             method = RequestMethod.GET)
     @ApiOperation(
-            value = "Post a new message to user's wall",
-            notes = "Post a new message to user's wall")
+            value = "Show user's follows",
+            notes = "Check who user follows")
     @ResponseStatus(code=HttpStatus.OK)
     public ResponseEntity<List<User>> getFollowedUsers(
             @PathVariable("user-id") String userId) {
@@ -80,8 +80,8 @@ public class SocialController {
             value = "/{user-id}/followed-by",
             method = RequestMethod.GET)
     @ApiOperation(
-            value = "Post a new message to user's wall",
-            notes = "Post a new message to user's wall")
+            value = "Show user's followers",
+            notes = "Check who is following user")
     public ResponseEntity<List<User>> getFollowingUsers(
             @PathVariable("user-id") String userId) {
 
