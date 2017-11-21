@@ -16,7 +16,10 @@ public interface UserService {
 
     void follow(String followingUserId, String followedUserId);
 
+    void unfollow(String followingUserId, String followedUserId);
+
     List<User> getFollowedUsers(String userId);
 
     List<User> getFollowingUsers(String userId);
+
 }

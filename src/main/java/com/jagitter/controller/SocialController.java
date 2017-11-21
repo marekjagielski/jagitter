@@ -59,6 +59,28 @@ public class SocialController {
     }
 
     @RequestMapping(
+            value = "/{user-id-1}/follows/{user-id-2}",
+            method = RequestMethod.DELETE)
+    @ApiOperation(
+            value = "User 1 unfollows User 2",
+            notes = "User 1 unfollows User 2")
+    @ResponseStatus(code=HttpStatus.OK)
+    public void unfollows(
+            @PathVariable("user-id-1") String followingUserId,
+            @PathVariable("user-id-2") String followedUserId) {
+
+        if (!userService.userExists(followingUserId)) {
+            throw new SocialControllerException("User with id '" + followingUserId + "' doesn't exist");
+        }
+
+        if (!userService.userExists(followedUserId)) {
+            throw new SocialControllerException("User with id '" + followedUserId + "' doesn't exist");
+        }
+
+        userService.unfollow(followingUserId, followedUserId);
+    }
+
+    @RequestMapping(
             value = "/{user-id}/follows",
             method = RequestMethod.GET)
     @ApiOperation(

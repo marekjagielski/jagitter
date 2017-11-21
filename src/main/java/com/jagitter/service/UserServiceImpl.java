@@ -1,6 +1,7 @@
 package com.jagitter.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +46,20 @@ public class UserServiceImpl implements UserService {
         User followingUser = repository.findOne(followingUserId);
         User followedUser = repository.findOne(followedUserId);
         followingUser.getFollowed().add(followedUser);
+        repository.save(followingUser);
+    }
+
+    @Override
+    public void unfollow(String followingUserId, String followedUserId) {
+        User followingUser = repository.findOne(followingUserId);
+        Optional<User> followedUser = followingUser.getFollowed().stream()
+                .filter(u -> followedUserId.equals(u.getUserId()))
+                .findFirst();
+
+        if (followedUser.isPresent()) {
+            followingUser.getFollowed().remove(followedUser.get());
+        }
+
         repository.save(followingUser);
     }
 
